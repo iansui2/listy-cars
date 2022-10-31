@@ -4,6 +4,9 @@ import { Hero } from '../components/Hero'
 import { CarsList } from '../components/CarsList'
 import { EndSection } from '../components/EndSection'
 import { useState, useEffect } from "react"
+import Swal from 'sweetalert2'
+import { useRouter } from "next/router"
+import CarApi from "../services/car-be.service"
 
 export default function Add() {
     const [name, setName] = useState("")
@@ -13,12 +16,39 @@ export default function Add() {
     const [image, setImage] = useState("")
     const [hasChosenImage, setHasChosenImage] = useState(false)
 
+    const router = useRouter()
+
     useEffect(() => {
         console.log(name);
         console.log(brand);
         console.log(year);
         console.log(description);
     }, [name, brand, year, description])
+
+    const listCar = () => {
+        if (brand !== "") {
+            const data = {
+                name: name,
+                brand: brand,
+                year: year,
+                description: description,
+                image: image
+            }
+    
+            CarApi.listCar(data)
+                .then((result) => {
+                    console.log(result.data)
+                    Swal.fire(
+                        'Success!',
+                        'Data is added succesfully!',
+                        'success'
+                    ).then(() => router.push("/"))
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }
 
     const safeParseFloat = (str) => {
         const value = Number.parseFloat(str)
@@ -99,7 +129,7 @@ export default function Add() {
                 }
                 {
                     image &&
-                        <Image src={image} crossOrigin="anonymous" w="full" h="400px" mb={6} />
+                        <Image src={image} crossOrigin="anonymous" w="full" mb={6} />
                 }
                 <Button
                     size="md"
@@ -107,6 +137,7 @@ export default function Add() {
                     _hover={{ transform: 'scale(1.05)', transition: 'all 300ms ease' }}
                     bg="yellow.500"
                     color="white"
+                    onClick={listCar}
                     mb={8}>
                     List Car
                 </Button>

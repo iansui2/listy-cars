@@ -1,13 +1,15 @@
-import { Box, Heading, Container, Image, Text, Input, VStack, Textarea, Button, Spinner } from '@chakra-ui/react'
+import { Box, Heading, Container, Image, Text, Input, Stack, VStack, Textarea, Button, Spinner } from '@chakra-ui/react'
 import { AppLayout } from '../components/AppLayout'
 import { Hero } from '../components/Hero'
 import { CarsList } from '../components/CarsList'
 import { EndSection } from '../components/EndSection'
 import { useState, useEffect } from "react"
 import { useRouter } from "next/router"
+import Swal from 'sweetalert2'
+import CarApi from "../services/car-be.service"
 
 export default function View() {
-    const [id, setId] = useState("")
+    const [id, setId] = useState(0)
     const [name, setName] = useState("")
     const [brand, setBrand] = useState("")
     const [year, setYear] = useState(0)
@@ -21,9 +23,71 @@ export default function View() {
         if (router.isReady) {
             const { id } = router.query
             setId(id)
-            console.log(id);
+            getCar(id);
         }    
-    }, [id])
+    }, [router.query])
+
+    const getCar = (id) => {
+        CarApi.getCar(id)
+            .then((result) => {
+                console.log(result.data);
+                const data = result.data;
+                setName(data.name);
+                setBrand(data.brand);
+                setYear(data.year);
+                setDescription(data.description);
+                setImage(data.image);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    const deleteCar = (id) => {
+        Swal.fire({
+            title: 'Are you sure you wnat to delete this car?',
+            showCancelButton: true,
+            confirmButtonText: 'Ok',
+            icon: 'warning',
+          }).then((result) => {
+            if (result.isConfirmed) {
+                CarApi.deleteCar(id)
+                    .then((result) => {
+                        console.log(result.data);
+                        Swal.fire('Deleted', 'Data deleted successfully!', 'success').then(() => router.push("/"))
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+              
+            }
+          })
+    }
+
+    const updateCar = () => {
+        if (brand !== "") {
+            const data = {
+                name: name,
+                brand: brand,
+                year: year,
+                description: description,
+                image: image
+            }
+    
+            CarApi.updateCar(id, data)
+                .then((result) => {
+                    console.log(result.data)
+                    Swal.fire(
+                        'Success!',
+                        'Data is updated succesfully!',
+                        'success'
+                    ).then(() => getCar(id))
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }
 
     const safeParseFloat = (str) => {
         const value = Number.parseFloat(str)
@@ -31,6 +95,7 @@ export default function View() {
     }
 
     const onChangeImage = async (e) => {
+        setImage("");
         setHasChosenImage(true);
 
         const file = e.target.files[0];
@@ -65,6 +130,7 @@ export default function View() {
                 <Input 
                     placeholder="Enter car name"
                     focusBorderColor="yellow.500"
+                    value={name}
                     onChange={(e) => setName(e.target.value)}
                     mb={6}
                 />
@@ -72,6 +138,7 @@ export default function View() {
                 <Input 
                     placeholder="Enter car brand"
                     focusBorderColor="yellow.500"
+                    value={brand}
                     onChange={(e) => setBrand(e.target.value)}
                     mb={6}
                 />
@@ -79,6 +146,7 @@ export default function View() {
                 <Input 
                     placeholder="Enter year bought"
                     focusBorderColor="yellow.500"
+                    value={year}
                     onChange={(e) => setYear(safeParseFloat(e.target.value))}
                     min="1970"
                     max="2022"
@@ -88,6 +156,7 @@ export default function View() {
                 <Textarea  
                     placeholder="Enter description"
                     focusBorderColor="yellow.500"
+                    value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     mb={6}
                 />
@@ -100,21 +169,34 @@ export default function View() {
                 }
                 {
                     image &&
-                        <Image src={image} crossOrigin="anonymous" w="full" h="400px" mb={6} />
+                        <Image src={image} crossOrigin="anonymous" w="full" mb={6} />
                 }
                 <Input
                     type="file"
                     onChange={onChangeImage}
                     mb={6} />
-                <Button
-                    size="md"
-                    rounded="full"
-                    _hover={{ transform: 'scale(1.05)', transition: 'all 300ms ease' }}
-                    bg="yellow.500"
-                    color="white"
-                    mb={8}>
-                    Update Listed Car
-                </Button>
+                <Stack direction={{ base: 'column', md: 'row' }} w="full">
+                    <Button
+                        size="md"
+                        rounded="full"
+                        _hover={{ transform: 'scale(1.05)', transition: 'all 300ms ease' }}
+                        bg="yellow.500"
+                        color="white"
+                        onClick={updateCar}
+                        mb={8}>
+                        Update Listed Car
+                    </Button>
+                    <Button
+                        size="md"
+                        rounded="full"
+                        _hover={{ transform: 'scale(1.05)', transition: 'all 300ms ease' }}
+                        bg="red.500"
+                        color="white"
+                        mb={8}
+                        onClick={() => deleteCar(id)}>
+                        Delete
+                    </Button>
+                </Stack> 
             </Container>  
         </AppLayout>  
     )
