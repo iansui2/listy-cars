@@ -3,7 +3,7 @@ import { AppLayout } from '../components/AppLayout'
 import { Hero } from '../components/Hero'
 import { CarsList } from '../components/CarsList'
 import { EndSection } from '../components/EndSection'
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Swal from 'sweetalert2'
 import { useRouter } from "next/router"
 import CarApi from "../services/car-be.service"
@@ -18,15 +18,8 @@ export default function Add() {
 
     const router = useRouter()
 
-    useEffect(() => {
-        console.log(name);
-        console.log(brand);
-        console.log(year);
-        console.log(description);
-    }, [name, brand, year, description])
-
     const listCar = () => {
-        if (brand !== "") {
+        if (name !== "" && brand !== "" && year !== "" && description !== "" && image !== "") {
             const data = {
                 name: name,
                 brand: brand,
@@ -47,6 +40,12 @@ export default function Add() {
                 .catch((error) => {
                     console.log(error);
                 });
+        } else {
+            Swal.fire(
+                '',
+                `Please fill up the form!`,
+                'error'
+            )
         }
     }
 
@@ -86,21 +85,21 @@ export default function Add() {
                     <Image pos="relative" src="../images/cars-add-page.jpg" />
                     <Heading size={{ base: '2xl', md: '3xl' }} color="white" pos="absolute" top="50%" left="50%" transform="translate(-50%, -50%)">List a Car</Heading>
                 </Box>    
-                <Text mb={2} fontWeight="bold">Car Name</Text>
+                <Text mb={2} fontWeight="bold">Car Name <span style={{ color: 'red' }}>*</span></Text>
                 <Input 
                     placeholder="Enter car name"
                     focusBorderColor="yellow.500"
                     onChange={(e) => setName(e.target.value)}
                     mb={6}
                 />
-                <Text mb={2} fontWeight="bold">Car Brand</Text>
+                <Text mb={2} fontWeight="bold">Car Brand <span style={{ color: 'red' }}>*</span></Text>
                 <Input 
                     placeholder="Enter car brand"
                     focusBorderColor="yellow.500"
                     onChange={(e) => setBrand(e.target.value)}
                     mb={6}
                 />
-                <Text mb={2} fontWeight="bold">Year bought</Text>
+                <Text mb={2} fontWeight="bold">Year bought <span style={{ color: 'red' }}>*</span></Text>
                 <Input 
                     placeholder="Enter year bought"
                     focusBorderColor="yellow.500"
@@ -109,14 +108,14 @@ export default function Add() {
                     max="2022"
                     mb={6}
                 />
-                <Text mb={2} fontWeight="bold">Description</Text>
+                <Text mb={2} fontWeight="bold">Description <span style={{ color: 'red' }}>*</span></Text>
                 <Textarea  
                     placeholder="Enter description"
                     focusBorderColor="yellow.500"
                     onChange={(e) => setDescription(e.target.value)}
                     mb={6}
                 />
-                <Text mb={2} fontWeight="bold">Upload Image</Text>
+                <Text mb={2} fontWeight="bold">Upload Image <span style={{ color: 'red' }}>*</span></Text>
                 <Input
                     type="file"
                     onChange={onChangeImage}
