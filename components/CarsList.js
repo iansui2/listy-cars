@@ -62,7 +62,7 @@ export const CarsList = ({ image }) => {
                             <Grid templateColumns={{ base: 'auto', md: 'repeat(2, 1fr)', xl: 'repeat(3, 1fr)' }} gap={6}>
                                 {
                                     cars.map((car) => (
-                                        <Box key={car.name} boxShadow="2xl" borderRadius="2xl" p={4} _hover={{ transform: 'scale(1.05)', transition: 'all 300ms ease' }}>
+                                        <Box key={car.name} bg="yellow.500" boxShadow="2xl" borderRadius="2xl" p={4} _hover={{ transform: 'scale(1.05)', transition: 'all 300ms ease' }}>
                                             <Image src={car.image} alt={car.name} h={250} mb={2} mx="auto" /> 
                                             <Heading size="lg" mb={2}>{car.name}</Heading>
                                             <Text mb={2}>{car.brand}</Text>
@@ -72,8 +72,8 @@ export const CarsList = ({ image }) => {
                                                 <Button
                                                     size="md"
                                                     rounded="full"
+                                                    bg="orange.500"
                                                     _hover={{ transform: 'scale(1.05)', transition: 'all 300ms ease' }}
-                                                    bg="yellow.500"
                                                     color="white"
                                                     onClick={() => {
                                                         router.push({
