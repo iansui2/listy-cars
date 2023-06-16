@@ -47,7 +47,7 @@ export default function View() {
 
     const deleteCar = (id) => {
         Swal.fire({
-            title: 'Are you sure you wnat to delete this car?',
+            title: 'Are you sure you want to delete this car?',
             showCancelButton: true,
             confirmButtonText: 'Ok',
             icon: 'warning',

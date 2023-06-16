@@ -14,7 +14,6 @@ export const CarsList = ({ image }) => {
     const getCars = () => {
         CarApi.getAllCars()
             .then((result) => {
-                console.log(result.data);
                 setCars(result.data);
                 setCarsAvailable(true);
             })
@@ -25,22 +24,24 @@ export const CarsList = ({ image }) => {
 
     const deleteCar = (id) => {
         Swal.fire({
-            title: 'Are you sure you wnat to delete this car?',
+            title: 'Are you sure you want to delete this car?',
             showCancelButton: true,
             confirmButtonText: 'Ok',
             icon: 'warning',
           }).then((result) => {
             if (result.isConfirmed) {
-                CarApi.deleteCar(id)
-                    .then((result) => {
-                        console.log(result.data);
-                        getCars();
-                        Swal.fire('Deleted', 'Data deleted successfully!', 'success')
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-              
+                fetch(`https://listy-cars-backend.000webhostapp.com/api/deleteCar/${id}`, {
+                    method: "DELETE"
+                })
+                .then((result) => {
+                    console.log(result.data);
+                    getCars();
+                    Swal.fire('Deleted', 'Data deleted successfully!', 'success')
+                })
+                .catch((error) => {
+                    console.log(error);
+                    console.error(error.stack);
+                });
             }
           })
     }
