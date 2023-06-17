@@ -15,7 +15,7 @@ export const Footer = ({ }) => {
         <Stack direction={{ base: 'column', md: 'row' }} fontWeight="bold" w="full">
           <HStack spacing={1}>
             <Text>Powered by</Text>
-            <Text as="a" href={process.env.REACT_APP_VERCEL} target="_blank" color="yellow.500" _hover={{ transform: 'scale(1.1)' }}>Vercel</Text>
+            <Text as="a" href={process.env.NEXT_PUBLIC_REACT_APP_VERCEL} target="_blank" color="yellow.500" _hover={{ transform: 'scale(1.1)' }}>Vercel</Text>
           </HStack>
           <Spacer />
           <Text color="yellow.500" cursor="default" _hover={{ transform: 'scale(1.05)', transition: 'all 300ms ease' }} onClick={onOpen}>Credits</Text>

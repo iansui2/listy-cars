@@ -47,13 +47,13 @@ export default function View() {
 
     const deleteCar = (id) => {
         Swal.fire({
-            title: 'Are you sure you want to delete this car?',
+            title: 'Are you sure you want to delete this listed car?',
             showCancelButton: true,
             confirmButtonText: 'Ok',
             icon: 'warning',
           }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`https://listy-cars-backend.000webhostapp.com/api/deleteCar/${id}`, {
+                fetch(`${process.env.NEXT_PUBLIC_REACT_APP_CARS_URL}/deleteCar/${id}`, {
                     method: "POST"
                 })
                 .then((result) => {
@@ -77,7 +77,7 @@ export default function View() {
             data.append('description', description);
             data.append('image', image);
 
-            fetch(`https://listy-cars-backend.000webhostapp.com/api/updateCar/${id}`, {
+            fetch(`${process.env.NEXT_PUBLIC_REACT_APP_CARS_URL}/updateCar/${id}`, {
                 method: "POST",
                 body: data
             })

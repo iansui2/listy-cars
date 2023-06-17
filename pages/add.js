@@ -27,7 +27,7 @@ export default function Add() {
             data.append('description', description);
             data.append('image', image);
 
-            fetch("https://listy-cars-backend.000webhostapp.com/api/listCar", {
+            fetch(`${process.env.NEXT_PUBLIC_REACT_APP_CARS_URL}/listCar`, {
                 method: "POST",
                 body: data
             })
