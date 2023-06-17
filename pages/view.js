@@ -58,7 +58,7 @@ export default function View() {
                 })
                 .then((result) => {
                     console.log(result.data);
-                    Swal.fire('Deleted', 'Data deleted successfully!', 'success').then(() => router.push("/"))
+                    Swal.fire('Deleted', 'Listed Car deleted successfully!', 'success').then(() => router.push("/"))
                 })
                 .catch((error) => {
                     console.log(error);
@@ -84,7 +84,7 @@ export default function View() {
             .then((result) => {
                 Swal.fire(
                     'Success!',
-                    'Data is updated succesfully!',
+                    'Listed Car is updated succesfully!',
                     'success'
                 ).then(() => getCar(id))
             })

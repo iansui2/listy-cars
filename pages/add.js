@@ -35,7 +35,7 @@ export default function Add() {
                 console.log(result);
                 Swal.fire(
                     'Success!',
-                    'Data is added succesfully!',
+                    'Car is listed succesfully!',
                     'success'
                 ).then(() => router.push("/"))
             })

@@ -36,7 +36,7 @@ export const CarsList = ({ image }) => {
                 .then((result) => {
                     console.log(result.data);
                     getCars();
-                    Swal.fire('Deleted', 'Data deleted successfully!', 'success')
+                    Swal.fire('Deleted', 'Listed Car deleted successfully!', 'success')
                 })
                 .catch((error) => {
                     console.log(error);
