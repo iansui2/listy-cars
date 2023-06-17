@@ -31,7 +31,7 @@ export const CarsList = ({ image }) => {
           }).then((result) => {
             if (result.isConfirmed) {
                 fetch(`https://listy-cars-backend.000webhostapp.com/api/deleteCar/${id}`, {
-                    method: "DELETE"
+                    method: "POST"
                 })
                 .then((result) => {
                     console.log(result.data);

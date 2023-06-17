@@ -20,26 +20,29 @@ export default function Add() {
 
     const listCar = () => {
         if (name !== "" && brand !== "" && year !== "" && description !== "" && image !== "") {
-            const data = {
-                name: name,
-                brand: brand,
-                year: year,
-                description: description,
-                image: image
-            }
-    
-            CarApi.listCar(data)
-                .then((result) => {
-                    console.log(result.data)
-                    Swal.fire(
-                        'Success!',
-                        'Data is added succesfully!',
-                        'success'
-                    ).then(() => router.push("/"))
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            let data = new FormData();
+            data.append('name', name);
+            data.append('brand', brand);
+            data.append('year', year);
+            data.append('description', description);
+            data.append('image', image);
+
+            fetch("https://listy-cars-backend.000webhostapp.com/api/listCar", {
+                method: "POST",
+                body: data
+            })
+            .then((result) => {
+                console.log(result);
+                Swal.fire(
+                    'Success!',
+                    'Data is added succesfully!',
+                    'success'
+                ).then(() => router.push("/"))
+            })
+            .catch((error) => {
+                console.log(error);
+                console.error(error.stack);
+            });
         } else {
             Swal.fire(
                 '',
@@ -82,7 +85,7 @@ export default function Add() {
         <AppLayout>
             <Container mt={16} maxW="container.xl">
                 <Box pos="relative" mb={16}>
-                    <Image pos="relative" src="../images/cars-add-page.jpg" />
+                    <Image pos="relative" src="../images/cars-add-page.jpg" alt="Add Page" />
                     <Heading size={{ base: '2xl', md: '3xl' }} color="white" pos="absolute" top="50%" left="50%" transform="translate(-50%, -50%)">List a Car</Heading>
                 </Box>    
                 <Text mb={2} fontWeight="bold">Car Name <span style={{ color: 'red' }}>*</span></Text>
@@ -128,7 +131,7 @@ export default function Add() {
                 }
                 {
                     image &&
-                        <Image src={image} crossOrigin="anonymous" w="full" mb={6} />
+                        <Image src={image} alt="Car" crossOrigin="anonymous" w="full" mb={6} />
                 }
                 <Button
                     size="md"

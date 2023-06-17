@@ -8,7 +8,7 @@ export const Hero = ({ image }) => (
             <Center>
                 <VStack align="start" spacing={4}>
                     <Heading>List your own car now!</Heading>
-                    <Text>Listing a car has never been easier. Start the journey now by listing your car today!</Text>
+                    <Text>Start the journey now by listing your car today!</Text>
                     <Link href="/add" passHref>
                         <Button
                             borderRadius="xl"

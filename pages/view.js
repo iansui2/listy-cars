@@ -53,41 +53,45 @@ export default function View() {
             icon: 'warning',
           }).then((result) => {
             if (result.isConfirmed) {
-                CarApi.deleteCar(id)
-                    .then((result) => {
-                        console.log(result.data);
-                        Swal.fire('Deleted', 'Data deleted successfully!', 'success').then(() => router.push("/"))
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-              
+                fetch(`https://listy-cars-backend.000webhostapp.com/api/deleteCar/${id}`, {
+                    method: "POST"
+                })
+                .then((result) => {
+                    console.log(result.data);
+                    Swal.fire('Deleted', 'Data deleted successfully!', 'success').then(() => router.push("/"))
+                })
+                .catch((error) => {
+                    console.log(error);
+                    console.error(error.stack);
+                });
             }
           })
     }
 
     const updateCar = () => {
         if (name !== "" && brand !== "" && year !== "" && description !== "" && image !== "") {
-            const data = {
-                name: name,
-                brand: brand,
-                year: year,
-                description: description,
-                image: image
-            }
-    
-            CarApi.updateCar(id, data)
-                .then((result) => {
-                    console.log(result.data)
-                    Swal.fire(
-                        'Success!',
-                        'Data is updated succesfully!',
-                        'success'
-                    ).then(() => getCar(id))
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            let data = new FormData();
+            data.append('name', name);
+            data.append('brand', brand);
+            data.append('year', year);
+            data.append('description', description);
+            data.append('image', image);
+
+            fetch(`https://listy-cars-backend.000webhostapp.com/api/updateCar/${id}`, {
+                method: "POST",
+                body: data
+            })
+            .then((result) => {
+                Swal.fire(
+                    'Success!',
+                    'Data is updated succesfully!',
+                    'success'
+                ).then(() => getCar(id))
+            })
+            .catch((error) => {
+                console.log(error);
+                console.error(error.stack);
+            });
         } else {
             Swal.fire(
                 '',
@@ -131,7 +135,7 @@ export default function View() {
         <AppLayout>
             <Container mt={16} maxW="container.xl">
                 <Box pos="relative" mb={16}>
-                    <Image pos="relative" src="../images/cars-view-page.jpg" />
+                    <Image pos="relative" src="../images/cars-view-page.jpg" alt="View Page" />
                     <Heading size={{ base: '2xl', md: '3xl' }} color="white" pos="absolute" top="50%" left="50%" transform="translate(-50%, -50%)">View a Car</Heading>
                 </Box>    
                 {
@@ -180,7 +184,7 @@ export default function View() {
                             }
                             {
                                 image &&
-                                    <Image src={image} crossOrigin="anonymous" w="full" mb={6} />
+                                    <Image src={image} alt="Car Upload" crossOrigin="anonymous" w="full" mb={6} />
                             }
                             <Input
                                 type="file"
