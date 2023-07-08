@@ -36,7 +36,6 @@ export default function View() {
     const getCar = (id) => {
         CarApi.getCar(id)
             .then((result) => {
-                console.log(result.data);
                 const data = result.data;
                 setName(data.name);
                 setBrand(data.brand);
@@ -58,11 +57,18 @@ export default function View() {
             icon: 'warning',
           }).then((result) => {
             if (result.isConfirmed) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Loading...',
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                    allowOutsideClick: false
+                });
+
                 fetch(`${process.env.NEXT_PUBLIC_REACT_APP_CARS_URL}/deleteCar/${id}`, {
                     method: "POST"
-                })
-                .then((result) => {
-                    console.log(result.data);
+                }).then((result) => {
+                    Swal.close();
                     Swal.fire('Deleted', 'Listed Car deleted successfully!', 'success').then(() => router.push("/"))
                 })
                 .catch((error) => {
@@ -82,11 +88,20 @@ export default function View() {
             data.append('description', description);
             data.append('image', image);
 
+            Swal.fire({
+                icon: 'info',
+                title: 'Loading...',
+                showConfirmButton: false,
+                showCancelButton: false,
+                allowOutsideClick: false
+            });
+
             fetch(`${process.env.NEXT_PUBLIC_REACT_APP_CARS_URL}/updateCar/${id}`, {
                 method: "POST",
                 body: data
             })
             .then((result) => {
+                Swal.close();
                 Swal.fire(
                     'Success!',
                     'Listed Car is updated succesfully!',

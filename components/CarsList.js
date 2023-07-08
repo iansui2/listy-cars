@@ -30,11 +30,19 @@ export const CarsList = ({ image }) => {
             icon: 'warning',
           }).then((result) => {
             if (result.isConfirmed) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Loading...',
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                    allowOutsideClick: false
+                });
+
                 fetch(`${process.env.NEXT_PUBLIC_REACT_APP_CARS_URL}/deleteCar/${id}`, {
                     method: "POST"
                 })
                 .then((result) => {
-                    console.log(result.data);
+                    Swal.close();
                     getCars();
                     Swal.fire('Deleted', 'Listed Car deleted successfully!', 'success')
                 })

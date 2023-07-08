@@ -20,7 +20,9 @@ export default function Add() {
     const router = useRouter()
 
     useEffect(() => {
-        checkMissingFields();
+        setTimeout(() => {
+            checkMissingFields();
+        }, 1000);
     }, [name, brand, year, description, image])
 
     const listCar = () => {
@@ -32,12 +34,20 @@ export default function Add() {
             data.append('description', description);
             data.append('image', image);
 
+            Swal.fire({
+                icon: 'info',
+                title: 'Loading...',
+                showConfirmButton: false,
+                showCancelButton: false,
+                allowOutsideClick: false
+            });
+
             fetch(`${process.env.NEXT_PUBLIC_REACT_APP_CARS_URL}/listCar`, {
                 method: "POST",
                 body: data
             })
             .then((result) => {
-                console.log(result);
+                Swal.close();
                 Swal.fire(
                     'Success!',
                     'Car is listed succesfully!',
@@ -48,6 +58,7 @@ export default function Add() {
                 console.log(error);
                 console.error(error.stack);
             });
+
         } else {
             Swal.fire(
                 '',
